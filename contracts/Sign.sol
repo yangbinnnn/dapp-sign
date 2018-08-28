@@ -44,4 +44,9 @@ contract Sign {
         bytes memory prefix = "\x19Ethereum Signed Message:\n32";
         return abi.encodePacked(prefix, _msgHash);
     }
+
+    function palce(uint256 a, uint256 b, uint8 v, bytes32 r, bytes32 s) public pure returns (address) {
+        bytes32 _hash = keccak256(abi.encodePacked(a, b));
+        return ecrecover(_hash, v, r, s);
+    }
 }
