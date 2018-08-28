@@ -36,7 +36,6 @@ console.log(`r -----------> ${r}`)
 console.log(`s -----------> ${s}`)
 console.log(`v -----------> ${v}`)
 console.log(`vd ----------> ${v_decimal}`)
-console.log("-------------------------------------------")
 
 var signMsg = "\x19Ethereum Signed Message:\n" + msg.toString().length + msg.toString()
 console.log("signMsg: " + signMsg)

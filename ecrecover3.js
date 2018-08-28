@@ -9,6 +9,7 @@ const SignArtifact = require('./build/contracts/Sign')
 const Sign = contract(SignArtifact)
 Sign.setProvider(provider)
 
+
 function splitSign(sign) {
     sign = sign.startsWith('0x')? sign.substr(2): sign;
     const r = '0x' + sign.slice(0, 64)
@@ -19,14 +20,6 @@ function splitSign(sign) {
         v_decimal += 27
     }
     return {r, s, v, v_decimal}
-}
-
-function toHex(msg){
-    var hexmsg = "";
-    for(var i=0; i<msg.length; i++){
-        hexmsg += msg.charCodeAt(i).toString(16);
-    }
-    return "0x"+hexmsg;
 }
 
 const addr = web3.eth.accounts[0]
