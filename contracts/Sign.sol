@@ -8,12 +8,12 @@ contract Sign {
     }
 
     // step1
-    function encode(uint256 _msg) public pure returns (bytes) {
+    function encode(bytes32 _msg) public pure returns (bytes) {
         return abi.encodePacked(_msg); 
     }
 
     // step2
-    function hash(uint256 _msg) public pure returns (bytes32) {
+    function hash(bytes32 _msg) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(_msg));
     }
 
@@ -48,5 +48,13 @@ contract Sign {
     function palce(uint256 a, uint256 b, uint8 v, bytes32 r, bytes32 s) public pure returns (address) {
         bytes32 _hash = keccak256(abi.encodePacked(a, b));
         return ecrecover(_hash, v, r, s);
+    }
+
+    function isSigned(address _addr, uint256 a, uint256 b, uint8 v, bytes32 r, bytes32 s) public pure returns (bool) {
+        return _addr == palce(a, b, v, r, s);
+    }
+
+    function plus(uint256 a, uint256 b) public pure returns (bytes) {
+        return abi.encodePacked(a, b);
     }
 }

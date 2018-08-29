@@ -4,52 +4,38 @@ const provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545')
 const web3 = new Web3(provider)
 
 const SignArtifact = require('./build/contracts/Sign')
-const Sign = contract(SignArtifact)
-Sign.setProvider(provider)
+const abi = SignArtifact['abi']
+const networkId = '4447'
+const contractAddr = SignArtifact['networks'][networkId]['address']
+const Sign = new web3.eth.Contract(abi, contractAddr)
 
-function padHex(n) {
-    z = 0;
-    width = 64;
-    n = n.startsWith('0x')? n.substr(2) : n;
-    n = n + '';
-    _n = n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-    return '0x' + _n;
-}
+// value -> hex value -> bytes32 value
 
-const msg = '123'
-let hex_msg = padHex(web3.toHex(msg))
-let hash = web3.sha3(hex_msg, {encoding: 'hex'})
+const msg = web3.utils.toHex('123')
+console.log(msg)
 // step0
-Sign.deployed().then(instance => {
-    return instance.echo.call(
-        msg
-    )
-}).then(data => {
+Sign.methods.echo(msg).call(function(error, data) {
     console.log('-------echo--------')
     console.log('output: ' + data)
 })
 
+let encode_msg = web3.eth.abi.encodeParameter('bytes32', msg)
 // step1
-Sign.deployed().then(instance => {
-    return instance.encode.call(
-        msg
-    )
- }).then(data => {
+Sign.methods.encode(msg).call(function(error, data) {
     console.log('-----encode-------')
-    console.log(`input encode => ${hex_msg}`)
+    console.log(`input encode ==> ${encode_msg}`)
     console.log(`output encode => ${data}`)
  })
 
  // step2
-Sign.deployed().then(instance => {
-    return instance.hash.call(
-        msg
-    )
-}).then(data => {
-    console.log('-----data------')
-    console.log(`input hash => ${hash}`)
+let hash = web3.utils.sha3(encode_msg, {encoding: 'hex'})
+Sign.methods.hash(encode_msg).call(function(error, data) {
+    console.log('-----hash------')
+    console.log(`input hash ==> ${hash}`)
     console.log(`output hash => ${data}`)
-}).catch(e => {
-    console.log('i got an error')
-    console.log(e)
+})
+
+var res = Sign.methods.hash(encode_msg).call()
+res.then(data => {
+    console.log(`output hash => ${data}`)
 })
