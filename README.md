@@ -1,1 +1,2 @@
 https://ethereum.stackexchange.com/questions/15364/ecrecover-from-geth-and-web3-eth-sign
+https://ethereum.stackexchange.com/questions/25601/what-is-the-difference-between-web3-eth-sign-web3-eth-accounts-sign-web3-eth-p
